@@ -10,10 +10,10 @@ const Explore = () => {
     const mapContainerRef = useRef(null);
     const [mapCenter, setMapCenter] = useState({lng: -0.96, lat: 6.66});
     const [mapZoom, setMapZoom] = useState(6.35);
+    const userMarker = new mapboxgl.Marker();
 
     useEffect(() => {
-        let timeoutId;
-        let positionWatchId;
+        let timeoutId;     
 
         // if map initalized, return / initialize map only once
         if (mapRef.current) return;
@@ -21,7 +21,7 @@ const Explore = () => {
         // create map here
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current,
-            style: "mapbox://styles/mapbox/streets-v12",
+            style: "mapbox://styles/mapbox/streets-v14",
             center: [0, 0],
             zoom: 4
         });
@@ -32,7 +32,7 @@ const Explore = () => {
 
             // display user location on map
             if (navigator.geolocation) {
-                positionWatchId = navigator.geolocation.watchPosition(
+                navigator.geolocation.getCurrentPosition(
                     (position) => {
                         const {longitude, latitude} = position.coords;
                         setMapCenter((oldValue) => {
@@ -42,8 +42,8 @@ const Explore = () => {
                             }
                         });
                         setMapZoom(6);
-                        timeoutId = setTimeout(animateMap(mapRef, longitude, latitude, 12), 1500);
-                        new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(mapRef.current);
+                        timeoutId = setTimeout(animateMap(mapRef, longitude, latitude, 14), 1500);
+                        userMarker.setLngLat([longitude, latitude]).addTo(mapRef.current);
                     },
                     (error) => {
                         alert("Unable to get your location!");
@@ -93,29 +93,33 @@ const Explore = () => {
         // clear timeout
         return () => {
             clearTimeout(timeoutId);
-            navigator.geolocation.clearWatch(positionWatchId);
         }
     }, []);
 
-    // useEffect(() => {
-    //     // track user location on map
-    //     if (navigator.geolocation) {
-    //         navigator.geolocation.watchPosition(
-    //             (position) => {
-    //                 const {longitude, latitude} = position.coords;
-    //                 console.log(longitude, latitude);
-    //                 setMapCenter((oldValue) => ({lng: longitude, lat: latitude}));
-    //                 setMapZoom(12);
+    useEffect(() => {
+        let positionWatchId;
 
-    //                 animateMap(mapRef, longitude, latitude, 12);
-    //             },
-    //             (error) => console.error("Error tracking user movement", error.message)
-    //         );
-    //     } else {
-    //         alert("Please allow location! Some features depend on this!");
-    //         console.error("Please allow location! Some features depend on this!");
-    //     }
-    // }, [mapRef])
+        // track user location on map
+        if (navigator.geolocation) {
+            positionWatchId = navigator.geolocation.watchPosition(
+                (position) => {
+                    const {longitude, latitude} = position.coords;
+                    console.log(longitude, latitude);
+                    setMapCenter((oldValue) => ({lng: longitude, lat: latitude}));
+                    setMapZoom(14);
+                    userMarker.setLngLat([longitude, latitude]).addTo(mapRef.current);
+
+                    animateMap(mapRef, longitude, latitude, 14);
+                },
+                (error) => console.error("Error tracking user movement", error.message)
+            );
+        } else {
+            alert("Please allow location! Some features depend on this!");
+            console.error("Please allow location! Some features depend on this!");
+        }
+
+        return () => navigator.geolocation.clearWatch(positionWatchId);
+    }, [mapRef])
 
 
   return (
