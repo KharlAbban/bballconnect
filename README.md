@@ -1,2 +1,2 @@
-# book-a-shoot
-Full-stack photoshoot booking software with Payment integration
+# bball-connect
+Full-stack basketball connectivity software with Payment integration
