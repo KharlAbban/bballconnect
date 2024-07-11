@@ -10,6 +10,7 @@ const Explore = () => {
     const mapContainerRef = useRef(null);
     const [mapCenter, setMapCenter] = useState({lng: -0.96, lat: 6.66});
     const [mapZoom, setMapZoom] = useState(6.35);
+    const [userPos, setUserPos] = useState({lng: -0.96, lat: 6.66});
     const userMarker = new mapboxgl.Marker();
 
     useEffect(() => {
@@ -21,7 +22,7 @@ const Explore = () => {
         // create map here
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current,
-            style: "mapbox://styles/mapbox/streets-v14",
+            style: "mapbox://styles/mapbox/streets-v12",
             center: [0, 0],
             zoom: 4
         });
@@ -36,6 +37,12 @@ const Explore = () => {
                     (position) => {
                         const {longitude, latitude} = position.coords;
                         setMapCenter((oldValue) => {
+                            return {
+                                lng: longitude,
+                                lat: latitude,
+                            }
+                        });
+                        setUserPos((oldValue) => {
                             return {
                                 lng: longitude,
                                 lat: latitude,
@@ -105,13 +112,26 @@ const Explore = () => {
                 (position) => {
                     const {longitude, latitude} = position.coords;
                     console.log(longitude, latitude);
-                    setMapCenter((oldValue) => ({lng: longitude, lat: latitude}));
-                    setMapZoom(14);
+                    setUserPos((oldValue) => ({
+                        lng: longitude,
+                        lat: latitude,
+                    }));
                     userMarker.setLngLat([longitude, latitude]).addTo(mapRef.current);
-
-                    animateMap(mapRef, longitude, latitude, 14);
+                    
+                    // if (mapRef.current) {
+                    //     mapRef.current.flyTo({
+                    //         center: [longitude, latitude],
+                    //         zoom: 14,
+                    //         essential: true, // This animation must be essential for tracking user's location.
+                    //     });
+                    // }
                 },
-                (error) => console.error("Error tracking user movement", error.message)
+                (error) => console.error("Error tracking user movement", error.message),
+                {
+                    enableHighAccuracy: true,
+                    maximumAge: 0,
+                    timeout: 5000
+                }
             );
         } else {
             alert("Please allow location! Some features depend on this!");
@@ -119,7 +139,7 @@ const Explore = () => {
         }
 
         return () => navigator.geolocation.clearWatch(positionWatchId);
-    }, [mapRef])
+    }, [mapRef]);
 
 
   return (
