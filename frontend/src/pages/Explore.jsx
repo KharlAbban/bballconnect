@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import mapboxgl from "mapbox-gl";
+import {SearchBox} from "@mapbox/search-js-react"
 import { animateMap } from '../utils/mapFunctions';
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -11,6 +12,7 @@ const Explore = () => {
     const [mapCenter, setMapCenter] = useState({lng: -0.96, lat: 6.66});
     const [mapZoom, setMapZoom] = useState(6.35);
     const [userPos, setUserPos] = useState({lng: -0.96, lat: 6.66});
+    const [userInput, setUserInput] = useState("");
     const userMarker = new mapboxgl.Marker();
 
     useEffect(() => {
@@ -144,10 +146,21 @@ const Explore = () => {
 
   return (
     <div className='relative flex max-lg:flex-col gap-0 h-screen w-screen overflow-hidden'>
-        <div className='absolute top-4 left-4 z-20 px-4 py-1 rounded shadow text-sm bg-white text-black'>
-            <p>Long: {mapCenter.lng}, Lat: {mapCenter.lat}</p>
+        <div className='absolute flex gap-4 top-4 left-4 z-20 w-80 bg-blue-200'>
+            <SearchBox
+            
+                placeholder='Find a court 🏀'
+                accessToken={import.meta.env.VITE_MAPBOX_MAPS_PUBLIC_TOKEN}
+                map={mapRef.current}
+                mapboxgl={mapboxgl}
+                value={userInput}
+                onChange={(d) => setUserInput(d)}
+                marker
+                options={{language: 'en', country: 'GH'}}
+            />
         </div>
-        <div className='w-screen h-2/3 overflow-hidden lg:h-screen lg:w-2/3' ref={mapContainerRef}></div>
+        <div className='w-screen h-2/3 overflow-hidden lg:h-screen lg:w-2/3' ref={mapContainerRef}>        
+        </div>
         <div className='shadow w-screen rounded-t-lg lg:rounded-none h-1/3 lg:h-screen lg:w-1/3 bg-blue-500 p-3' />
     </div>
   )
