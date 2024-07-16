@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.mapboxgl-popup {
+    @apply max-w-12 overflow-x-hidden
+}
+.mapboxgl-popup-content {
+    @apply bg-orange-400 text-black text-sm p-2 relative max-w-40
+}
+.mapboxgl-popup-close-button {
+    @apply right-2 text-xl font-bold hover:text-white
+}

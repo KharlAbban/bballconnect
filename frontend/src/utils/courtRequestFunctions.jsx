@@ -24,9 +24,15 @@ export const getAllCourtsInfo = async ({queryKey}) => {
 }
 
 // fetch a single court by its id from the server
-export const getCourtDetailInfo = async (courtId) => {
+export const getCourtDetailInfo = async ({queryKey}) => {
+    const [_, courtId] = queryKey;
+
     try {
-        const response = await axiosRequest.get(`/api/courts/${courtId}`);
+        const response = await axiosRequest.get(`/courts/${courtId.courtId}`, {
+            params: {
+                fromFsq: courtId.fromFsq
+            }
+        });
         return response.data;
     } catch (error) {
         console.error("Error fetching court details:", error.message);
