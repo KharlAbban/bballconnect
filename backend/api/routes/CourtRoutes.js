@@ -14,7 +14,7 @@ courtRouter.get("/:courtId", getACourt);
 // Update a specific court by its ID
 courtRouter.put("/", updateACourt);
 
-// Delete a specific court by its ID
+// request to delete a specific court by its ID
 courtRouter.delete("/:courtId", deleteACourt);
 
 module.exports = courtRouter;

@@ -11,7 +11,10 @@ const app = express();
 const port_no = process.env.PORT_NO;
 const MONGODB_URI = process.env.MONGO_URI_LOCAL;
 
-app.use(cors());
+app.use(cors({
+    origin: 'https://bballconnect.vercel.app',
+    credentials: true
+}));
 app.use(cookieParser());
 app.use(express.json());
 app.use(morgan("dev"));
