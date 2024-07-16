@@ -48,8 +48,43 @@ const getAllCourts = async (req, res) => {
     }
 }
 
+const getACourt = async (req, res) => {
+    const fsqCourtDetailBaseUrl = process.env.FOURSQUARE_PLACE_DETAIL_BASE_URL;
+    const {courtId} = req.params;
+    const {fromFsq} = req.query;
+
+    try {
+        // if is from Foursquare, get place details
+        if (fromFsq === 'true') {
+            // axios request options
+            const fsqReqOptions = {
+                method: 'GET',
+                headers: {
+                    accept: 'application/json',
+                    Authorization: process.env.FOURSQUARE_DEV_API_KEY
+                },
+                url: `${fsqCourtDetailBaseUrl}${courtId}`
+            }
+
+            const foursquareCourtDetail = await axios.request(fsqReqOptions);
+
+            return res.json(foursquareCourtDetail.data);
+
+        } else {
+            const customCourtDetail = await CourtModel.findById(courtId);
+
+            res.status(404).json({message: "Item not found!"})
+        }
+
+    } catch (err) {
+        console.error("Error fetching court info:", err.message);
+        res.status(500).json({ message: "Failed to fetch court information! Try again!"});
+    }
+
+
+}
+
 const addNewCourt = async (req, res) => {}
-const getACourt = async (req, res) => {}
 const updateACourt = async (req, res) => {}
 const deleteACourt = async (req, res) => {}
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import mapboxgl from "mapbox-gl"
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { animateMap, getMapDistance } from '../utils/mapFunctions';
@@ -100,10 +100,13 @@ const CourtMap = ({userPosition, courts, setSelectedCourt, setAreaPosition}) => 
             const marker = new mapboxgl.Marker()
             marker.setLngLat([court.geocodes.main.longitude, court.geocodes.main.latitude]).addTo(mapRef.current);
             marker.setPopup(new mapboxgl.Popup({ offset: 25 }).setText(court.name));
+           marker.getElement().addEventListener("click", () => {
+            court?.fsq_id ? setSelectedCourt({courtId: court.fsq_id, fromFsq: true}): setSelectedCourt({courtId: court.id, fromFsq: false});
+           })
         })
 
         return () => {
-
+            // mapRef.current.remove();
         }
 
     }, [courts]);
