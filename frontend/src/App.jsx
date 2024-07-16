@@ -1,21 +1,17 @@
 import React from 'react'
 import {RouterProvider, createBrowserRouter} from "react-router-dom"
-import HomeComponent from './components/HomeComponent'
-import Explore from './pages/Explore'
-import Protected from './components/Protected'
+import { CourtsPage, LandingPage } from './pages'
+import { RouteError } from './components'
 
 const bballconnectrouter = createBrowserRouter([
   {
     path: "/",
-    element: <HomeComponent />
+    element: <LandingPage />,
+    errorElement: <RouteError />
   },
   {
-    path: "/explore",
-    element: <Explore />
-  },
-  {
-    path: "/protected",
-    element: <Protected />
+    path: "/courts",
+    element: <CourtsPage />
   }
 ])
 

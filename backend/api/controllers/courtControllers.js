@@ -3,10 +3,10 @@ const CourtModel = require("../models/CourtModel");
 
 const getAllCourts = async (req, res) => {
     const fsqCourtBaseUrl = process.env.FOURSQUARE_PLACES_COURTS_BASE_URL;
-    // const {latitude, longitude} = req.query; //user current location / map center
+    const {areaLatitude, areaLongitude} = req.query[1]; //user current location
 
     try {
-        const radius = 5000; // search radius in meters
+        const radius = 10000; // search radius in meters
 
         // axios request options
         const fsqReqOptions = {
@@ -16,6 +16,7 @@ const getAllCourts = async (req, res) => {
                 Authorization: process.env.FOURSQUARE_DEV_API_KEY
             },
             url: `${fsqCourtBaseUrl}&near=Accra`
+            // url: `${fsqCourtBaseUrl}&ll=${userLatitude},${userLongitude}`
         }
 
         // Fetch courts from Mongo database
@@ -34,9 +35,8 @@ const getAllCourts = async (req, res) => {
 
         // Fetch courts from Foursquare API server based on user location
         const foursquareCourts = await axios.request(fsqReqOptions);
-        console.log(foursquareCourts);
 
-        return res.json(foursquareCourts.data);
+        return res.json(foursquareCourts.data.results);
 
         // Merge and filter duplicate courts
         // Extract minimal location info
