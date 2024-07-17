@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import {ClerkProvider} from "@clerk/clerk-react"
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query"
+import {inject} from "@vercel/analytics"
 import './index.css'
 
 // import CLERK API KEY
@@ -20,3 +21,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </ClerkProvider>
   </React.StrictMode>,
 )
+
+// inject vercel analytics
+inject();
