@@ -70,7 +70,7 @@ const CourtsPage = () => {
         <div className='w-full lg:w-2/3 bg-grey-300 h-1/2 lg:h-full overflow-hidden'>
           {userPosition.lng != null && <CourtMap userPosition={userPosition} courts={allCourts} setSelectedCourt={setSelectedCourt} setAreaPosition={setAreaPosition} />}
         </div>
-        <div className='w-full lg:w-1/3 bg-teal-500 h-1/2 lg:h-full p-3 overflow-y-auto'>
+        <div className='w-full dark:text-gray-100 text-pageDarkColor lg:w-1/3 h-1/2 lg:h-full p-3 overflow-y-auto'>
           <hr className='my-4' />
           <h3 className='font-semibold underline text-lg'>Court Details</h3>
           {courtDetailInfo == null && <p>No court selected</p>}

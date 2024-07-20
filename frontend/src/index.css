@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+PL:wght@100..400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,4 +13,18 @@
 }
 .mapboxgl-popup-close-button {
     @apply right-2 text-xl font-bold hover:text-white
+}
+.mapboxgl-marker {
+    /* background: url("/fullbodyicon.png") no-repeat center center; */
+    background: url("/hoopIcon.png") no-repeat center center;
+    background-size: cover;
+    width: 32px;
+    height: 47px;
+}
+.mapboxgl-marker svg {
+    display: none;
+}
+.custom-user-marker {}
+.custom-court-marker {
+    background: url("/hoopIcon.png");
 }
