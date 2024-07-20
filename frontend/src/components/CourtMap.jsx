@@ -4,6 +4,7 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { animateMap, getMapDistance } from '../utils/mapFunctions';
 import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+import { customUserMarker } from '../utils/customMapComponents';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_MAPS_PUBLIC_TOKEN;
 
@@ -12,7 +13,8 @@ const CourtMap = ({userPosition, courts, setSelectedCourt, setAreaPosition}) => 
     const mapContainerRef = useRef(null);
     let mapCenter = {lng: null, lat: null}
 
-    const userMarker = new mapboxgl.Marker();
+    // const userMarker = new mapboxgl.Marker();
+    const userMarker = customUserMarker;
     const geocoderSearchBar = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,

@@ -4,6 +4,17 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  theme: {},
+  theme: {
+    extend: {
+      colors: {
+        "pageDarkColor": "#13181e",
+        "pageLightColor": "#ff6723"
+      },
+      fontFamily: {
+        playwright: "Playwrite PL",
+        poppins: "Poppins",
+      }
+    }
+  },
   plugins: [],
 }
