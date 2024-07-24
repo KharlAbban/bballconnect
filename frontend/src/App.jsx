@@ -1,4 +1,3 @@
-import React from 'react'
 import {RouterProvider, createBrowserRouter} from "react-router-dom"
 import { CourtsPage, LandingPage } from './pages'
 import { RouteError } from './components'
@@ -11,8 +10,9 @@ const bballconnectrouter = createBrowserRouter([
   },
   {
     path: "/courts",
-    element: <CourtsPage />
-  }
+    element: <CourtsPage />,
+    errorElement: <RouteError />
+  },
 ])
 
 const App = () => {
