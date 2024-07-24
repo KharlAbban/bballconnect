@@ -3,8 +3,8 @@ export const animateMap = (mapRef, longitude, latitude, zoom) => {
 
     mapRef.current.easeTo({
         center: [longitude, latitude],
-        duration: 5000,
-        pitch: 3,
+        duration: 3500,
+        pitch: 10,
         zoom: zoom
     });
 }

@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { CourtMap } from '../components';
+import { AllCourts, CourtMap, SingleCourt } from '../components';
 import {useQuery} from "@tanstack/react-query"
 import { getAllCourtsInfo, getCourtDetailInfo } from '../utils/courtRequestFunctions';
-import {HashLoader} from "react-spinners"
+import {PanelGroup, Panel, PanelResizeHandle} from "react-resizable-panels"
+import { handleWindowResizeForPanels } from "../utils/helperFunctions";
+import { BiSolidToTop } from "react-icons/bi";
 
 const CourtsPage = () => {
+    const [isSmallScreen, setIsSmallScreen] = useState(true);
     const [selectedCourt, setSelectedCourt] = useState(null);
     const [areaPosition, setAreaPosition] = useState({lng: null, lat: null});
+    const [courtDetailPosition, setCourtDetailPosition] = useState({lng: null, lat: null});
     const [userPosition, setUserPosition] = useState({lng: null, lat: null});
 
     useEffect(() => {
+      handleWindowResizeForPanels(setIsSmallScreen);
+
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -48,10 +54,15 @@ const CourtsPage = () => {
                 lat: 4,
             }
         });
-    }
+      }
+
+      window.addEventListener("resize", () => handleWindowResizeForPanels(setIsSmallScreen));
+
+      return () => window.removeEventListener("resize", () => handleWindowResizeForPanels(setIsSmallScreen));
+
     }, []);
 
-    const {data: allCourts, isLoading: allCourtsLoading, isError, error} = useQuery({
+    const {data: allCourts, isLoading: allCourtsLoading, isError: isCourtsError, error: courtsError} = useQuery({
       queryKey: ['courts', {areaLongitude: areaPosition.lng,areaLatitude: areaPosition.lat}],
       queryFn: getAllCourtsInfo,
       enabled: !!areaPosition.lng && !!areaPosition.lat,
@@ -66,29 +77,21 @@ const CourtsPage = () => {
     });
 
   return (
-    <div className='w-full h-full flex max-lg:flex-col overflow-hidden relative gap-0'>
-        <div className='w-full lg:w-2/3 bg-grey-300 h-1/2 lg:h-full overflow-hidden'>
-          {userPosition.lng != null && <CourtMap userPosition={userPosition} courts={allCourts} setSelectedCourt={setSelectedCourt} setAreaPosition={setAreaPosition} />}
+    <PanelGroup className="h-full w-full relative" direction={isSmallScreen ? 'vertical' : 'horizontal'}>
+      <Panel>
+        {userPosition.lng != null && <CourtMap courtDetailPosition={courtDetailPosition} userPosition={userPosition} courts={allCourts} setSelectedCourt={setSelectedCourt} setAreaPosition={setAreaPosition} />}
+      </Panel>
+      <PanelResizeHandle className="lg:w-1 max-lg:h-1 bg-pageDarkColor dark:bg-gray-200 pointer-events-none" />
+      <Panel defaultSize={40} minSize={40} maxSize={50} className="text-pageDarkColor dark:text-gray-100 p-2 font-light">
+        <div className='h-full w-full overflow-y-scroll overflow-x-hidden relative pb-10'>
+          {selectedCourt && <SingleCourt courtDetailInfo={courtDetailInfo} courtDetailLoading={courtDetailLoading} isCourtDetailError={isCourtDetailError} courtDetailError={courtDetailError} />}
+          {selectedCourt && <span onClick={() => {document.querySelector("#singleCourtDiv").scrollIntoView({behavior: "smooth"});console.log("Item scrolled!")}} className="p-3 rounded-full hover:bg-pageLightColor duration-100 cursor-pointer fixed bottom-4 right-7 bg-pageLightColor/75">
+            <BiSolidToTop size={22} />
+          </span>}
+          <AllCourts setCourtDetailPosition={setCourtDetailPosition} selectedCourt={selectedCourt} setSelectedCourt={setSelectedCourt} allCourts={allCourts} allCourtsLoading={allCourtsLoading} isCourtsError={isCourtsError} courtsError={courtsError} />
         </div>
-        <div className='w-full dark:text-gray-100 text-pageDarkColor lg:w-1/3 h-1/2 lg:h-full p-3 overflow-y-auto'>
-          <hr className='my-4' />
-          <h3 className='font-semibold underline text-lg'>Court Details</h3>
-          {courtDetailInfo == null && <p>No court selected</p>}
-          {courtDetailLoading && <HashLoader />}
-          {isCourtDetailError && <p>{JSON.stringify(courtDetailError.message)}</p>}
-          {courtDetailInfo && <p className='bg-gray-100 p-1'>{JSON.stringify(courtDetailInfo)}</p>}
-          <hr className='my-4' />
-          <h3 className='font-semibold underline text-lg'>Available Courts near area</h3>
-          {allCourtsLoading && <HashLoader />}
-          {isError && <p>{JSON.stringify(error.message)}</p>}
-          {allCourts?.map(court => (
-            <div key={court.fsq_id} className='mb-4 bg-gray-200'>
-              <h3>{court.name}</h3>
-              <p>{JSON.stringify(court.geocodes.main)}</p>
-            </div>
-          ))}
-        </div>
-    </div>
+      </Panel>
+    </PanelGroup>
   )
 }
 

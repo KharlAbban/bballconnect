@@ -2,13 +2,13 @@ import React, { useEffect, useRef } from 'react'
 import mapboxgl from "mapbox-gl"
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { animateMap, getMapDistance } from '../utils/mapFunctions';
+import { customUserMarker } from '../utils/customMapComponents';
 import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
-import { customUserMarker } from '../utils/customMapComponents';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_MAPS_PUBLIC_TOKEN;
 
-const CourtMap = ({userPosition, courts, setSelectedCourt, setAreaPosition}) => {
+const CourtMap = ({userPosition, courts, setSelectedCourt, setAreaPosition, courtDetailPosition}) => {
     const mapRef = useRef(null);
     const mapContainerRef = useRef(null);
     let mapCenter = {lng: null, lat: null}
@@ -33,9 +33,9 @@ const CourtMap = ({userPosition, courts, setSelectedCourt, setAreaPosition}) => 
         // create map here
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current,
-            style: "mapbox://styles/mapbox/streets-v12",
+            // style: "mapbox://styles/khvngkharl/clyykf9gy00cg01nv2ah21hni",
             center: [0, 0],
-            zoom: 4
+            zoom: 4,
         });
 
         // add geocoding functionality
@@ -50,9 +50,25 @@ const CourtMap = ({userPosition, courts, setSelectedCourt, setAreaPosition}) => 
         });
 
         // Event handlers for Map
+        mapRef.current.on('style.load', () => {
+            let lightPreset = 'day'
+            const h = new Date().getHours();
+
+            if (h < 4) {
+                lightPreset = 'night'
+            } else if (h < 5) {
+                lightPreset = 'dawn'
+            } else if (h < 16) {
+                lightPreset = 'day'
+            } else {
+                lightPreset = 'night'
+            }
+            mapRef.current.setConfigProperty('basemap', 'lightPreset', lightPreset);
+        });
+
         mapRef.current.on("load", () => {
             mapCenter = {lng: userPosition.lng, lat: userPosition.lat};
-            animateMap(mapRef, userPosition.lng, userPosition.lat, 14);
+            animateMap(mapRef, userPosition.lng, userPosition.lat, 16);
             userMarker.setLngLat([userPosition.lng, userPosition.lat]).addTo(mapRef.current);
             
             if (navigator.geolocation) {
@@ -102,20 +118,19 @@ const CourtMap = ({userPosition, courts, setSelectedCourt, setAreaPosition}) => 
             const marker = new mapboxgl.Marker()
             marker.setLngLat([court.geocodes.main.longitude, court.geocodes.main.latitude]).addTo(mapRef.current);
             marker.setPopup(new mapboxgl.Popup({ offset: 25 }).setText(court.name));
-           marker.getElement().addEventListener("click", () => {
+            marker.getElement().addEventListener("click", () => {
             court?.fsq_id ? setSelectedCourt({courtId: court.fsq_id, fromFsq: true}): setSelectedCourt({courtId: court.id, fromFsq: false});
            })
         })
-
-        return () => {
-            // mapRef.current.remove();
-        }
-
     }, [courts]);
+
+    (mapRef.current && userPosition?.lng != null) && animateMap(mapRef, courtDetailPosition.lng, courtDetailPosition.lat, 17);
 
 
   return (
-    <div ref={mapContainerRef} className='w-full h-full bg-gray-300' />
+    <div ref={mapContainerRef} className='bg-gray-500 w-full h-full flex justify-center items-center'>
+        <p className='text-3xl font-playwright'>Loading map ....</p>
+    </div>
   )
 }
 
