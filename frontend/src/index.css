@@ -28,3 +28,13 @@
 .custom-court-marker {
     background: url("/hoopIcon.png");
 }
+
+@layer utilities {
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}
