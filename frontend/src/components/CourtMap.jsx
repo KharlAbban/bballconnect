@@ -8,7 +8,7 @@ import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_MAPS_PUBLIC_TOKEN;
 
-const CourtMap = ({userPosition, courts, setSelectedCourt, setAreaPosition, courtDetailPosition}) => {
+const CourtMap = ({userPosition, courts, setSelectedCourt, setAreaPosition, courtDetailPosition, setCourtDetailPosition}) => {
     const mapRef = useRef(null);
     const mapContainerRef = useRef(null);
     let mapCenter = {lng: null, lat: null}
@@ -20,7 +20,8 @@ const CourtMap = ({userPosition, courts, setSelectedCourt, setAreaPosition, cour
         mapboxgl: mapboxgl,
         placeholder: 'Search courts by location',
         country: 'GH',
-        language: 'en'
+        language: 'en',
+        marker: false
     })
 
     // First effect to set up map
@@ -43,6 +44,12 @@ const CourtMap = ({userPosition, courts, setSelectedCourt, setAreaPosition, cour
         
         // Event handler for Geocoder
         geocoderSearchBar.on('result', ({result}) => {
+            setCourtDetailPosition((oldValue) => {
+                return {
+                    lng: null,
+                    lat: null,
+                }
+              });
             setAreaPosition(() => ({
                 lng: result.center[0],
                 lat: result.center[1]
@@ -94,6 +101,13 @@ const CourtMap = ({userPosition, courts, setSelectedCourt, setAreaPosition, cour
         mapRef.current.on("moveend", () => {
             if (mapCenter.lng == null) return;
 
+            setCourtDetailPosition((oldValue) => {
+                return {
+                    lng: null,
+                    lat: null,
+                }
+            });
+
             // console.log("Map center:", mapRef.current.getCenter());
             const {lng: currLong, lat: currLat} = mapRef.current.getCenter();
             const distance = getMapDistance(mapCenter.lng, mapCenter.lat, currLong, currLat);
@@ -124,7 +138,7 @@ const CourtMap = ({userPosition, courts, setSelectedCourt, setAreaPosition, cour
         })
     }, [courts]);
 
-    (mapRef.current && userPosition?.lng != null) && animateMap(mapRef, courtDetailPosition.lng, courtDetailPosition.lat, 17);
+    (mapRef.current && userPosition?.lng != null && courtDetailPosition?.lng != null) && animateMap(mapRef, courtDetailPosition.lng, courtDetailPosition.lat, 17);
 
 
   return (
