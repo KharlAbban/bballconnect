@@ -34,7 +34,6 @@ const CourtsPage = () => {
                 });
             },
             (error) => {
-                alert("Unable to get your location!");
                 setUserPosition((oldValue) => {
                     return {
                         lng: -0.0895,
@@ -47,7 +46,6 @@ const CourtsPage = () => {
             }
         );
       } else {
-        alert("Please allow location! Some features depend on this!");
         setUserPosition((oldValue) => {
             return {
                 lng: -0.0895,

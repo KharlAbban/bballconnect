@@ -28,9 +28,9 @@ const LandingPage = () => {
           <h3 className='flex items-center lg:justify-end justify-center xl:mb-8 mb-6 pt-1'>
             <img loading='lazy' src="/logo.png" className='lg:w-16 w-24 float-end' alt="" />
           </h3>
-          <h4 className='group relative font-bold md:text-5xl text-3xl font-playwright mb-3 max-lg:text-center cursor-pointer hover:text-pageLightColor/75' title='Click to copy' onClick={handleClick}>
-            CourtConnect
-            <span className='absolute text-xs font-mono text-gray-100 bg-gray-700 w-max p-2 rounded right-1/2 -top-10 opacity-0 group-hover:opacity-100'>{isCopied ? 'Link copied!' :'Click to copy site link'}</span>
+          <h4 className='relative mb-3 max-lg:text-center'>
+            <span title='Click to copy' onClick={handleClick} className='font-bold md:text-5xl text-3xl font-playwright peer cursor-pointer hover:text-pageLightColor/75'>CourtConnect</span>
+            <span className='absolute text-xs font-mono text-gray-100 bg-gray-700 w-max p-2 rounded right-1/2 -top-10 opacity-0 peer-hover:opacity-100'>{isCopied ? 'Link copied!' :'Click to copy site link'}</span>
           </h4>
           <h4 className='font-light text-gray-500 mb-6 max-lg:text-center'>We find the court, you play the ball</h4>
           <p className='lg:w-11/12 md:w-2/3 mb-4 lg:float-end mx-auto dark:text-gray-300 text-gray-800 text-sm'>

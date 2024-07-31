@@ -89,7 +89,7 @@ const CourtMap = ({userPosition, courts, setSelectedCourt, setAreaPosition, cour
                     {
                         enableHighAccuracy: true,
                         maximumAge: 0,
-                        timeout: 5000
+                        timeout: 10000
                     }
                 );
             } else {
@@ -120,7 +120,8 @@ const CourtMap = ({userPosition, courts, setSelectedCourt, setAreaPosition, cour
         });
 
         return () => {
-            navigator.geolocation.clearWatch(positionWatchId)
+            navigator.geolocation.clearWatch(positionWatchId);
+            console.log("Function is executed!");
         }
 
     }, []);
@@ -136,7 +137,11 @@ const CourtMap = ({userPosition, courts, setSelectedCourt, setAreaPosition, cour
             court?.fsq_id ? setSelectedCourt({courtId: court.fsq_id, fromFsq: true}): setSelectedCourt({courtId: court.id, fromFsq: false});
            })
         })
-    }, [courts]);
+
+        // return () => {
+        //     mapRef.current = null;
+        // }
+    }, [courts, mapRef]);
 
     (mapRef.current && userPosition?.lng != null && courtDetailPosition?.lng != null) && animateMap(mapRef, courtDetailPosition.lng, courtDetailPosition.lat, 17);
 

@@ -2,6 +2,7 @@ import React from 'react'
 import { HashLoader } from 'react-spinners'
 import { MdMyLocation } from "react-icons/md";
 import { BsFillGeoFill } from "react-icons/bs";
+import { Link } from 'react-router-dom';
 
 const AllCourts = ({allCourts, allCourtsLoading, isCourtsError, courtsError, selectedCourt, setSelectedCourt, setCourtDetailPosition}) => {
 
@@ -43,7 +44,7 @@ const AllCourts = ({allCourts, allCourtsLoading, isCourtsError, courtsError, sel
             {allCourts?.length < 1 && 
               <div className='w-1/2 py-2 mx-auto justify-center items-center gap-4 min-h-32 flex flex-col'>
                 <p>Sorry! No courts found in this area! <br /> Search another area, or</p>
-                <button className='py-2 w-full px-5 rounded bg-pageLightColor/80 hover:scale-95 hover:bg-pageLightColor duration-0 shadow'>Add a court 🏀</button>
+                <Link to="/courts/new" className='py-2 w-full px-5 rounded bg-pageLightColor/80 hover:scale-95 hover:bg-pageLightColor duration-0 shadow text-center'>Add a court 🏀</Link>
               </div>
             }
             
