@@ -61,15 +61,11 @@ const courtSchema = new mongoose.Schema({
         entryFee: {
             type: String,
             default: null
-        }
-    },
-    amenities: {
-        type: [String],
-        validate: {
-            validator: (amenitiesArray) => amenitiesArray.length > 0,
-            message: 'At least one amenity must be provided'
         },
-        required: true
+        invitation: {
+            type: Boolean,
+            default: false,
+        }
     },
     features: {
         courtSurface: {

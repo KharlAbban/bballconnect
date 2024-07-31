@@ -28,6 +28,12 @@
 .custom-court-marker {
     background: url("/hoopIcon.png");
 }
+input, select, textarea {
+    @apply outline-none text-pageDarkColor bg-gray-200
+}
+input:disabled, select:disabled, textarea:disabled {
+    @apply bg-gray-500 cursor-not-allowed
+}
 
 @layer utilities {
     .no-scrollbar::-webkit-scrollbar {

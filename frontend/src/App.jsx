@@ -1,6 +1,7 @@
 import {RouterProvider, createBrowserRouter} from "react-router-dom"
-import { CourtsPage, LandingPage } from './pages'
+import { CourtsPage, LandingPage, NewCourtPage } from './pages'
 import { RouteError } from './components'
+import {newCourtAction} from "./actions/newCourtAction"
 
 const bballconnectrouter = createBrowserRouter([
   {
@@ -13,6 +14,12 @@ const bballconnectrouter = createBrowserRouter([
     element: <CourtsPage />,
     errorElement: <RouteError />
   },
+  {
+    path: "/courts/new",
+    element: <NewCourtPage />,
+    errorElement: <RouteError />,
+    action: newCourtAction
+  }
 ])
 
 const App = () => {

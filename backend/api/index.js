@@ -12,8 +12,8 @@ const port_no = process.env.PORT_NO;
 const MONGODB_URI = process.env.MONGO_URI_LOCAL;
 
 app.use(cors({
-    origin: 'https://bballconnect.vercel.app',
-    // origin: 'http://localhost:5173',
+    // origin: 'https://bballconnect.vercel.app',
+    origin: 'http://localhost:5173',
     credentials: true
 }));
 app.use(cookieParser());
