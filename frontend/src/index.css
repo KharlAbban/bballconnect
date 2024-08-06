@@ -5,6 +5,17 @@
 @tailwind components;
 @tailwind utilities;
 
+#constructionModal::backdrop {
+    background-image: linear-gradient(
+      45deg,
+      magenta,
+      rebeccapurple,
+      dodgerblue,
+      green
+    );
+    opacity: 0.75;
+  }
+
 .mapboxgl-popup {
     @apply max-w-12 overflow-x-hidden
 }

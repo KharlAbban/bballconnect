@@ -121,7 +121,7 @@ const CourtMap = ({userPosition, courts, setSelectedCourt, setAreaPosition, cour
 
         return () => {
             navigator.geolocation.clearWatch(positionWatchId);
-            console.log("Function is executed!");
+            // console.log("Function is executed!");
         }
 
     }, []);

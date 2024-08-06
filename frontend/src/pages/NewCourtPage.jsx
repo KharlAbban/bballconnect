@@ -1,7 +1,7 @@
 import { IoClose } from "react-icons/io5";
 import { IoCheckmarkDone } from "react-icons/io5";
 import { NewCourtDetails, NewCourtImages, NewCourtLocation } from "../components";
-import { Form, useSubmit } from "react-router-dom";
+import { Form, useNavigate, useSubmit } from "react-router-dom";
 import { useState } from "react";
 
 const NewCourtPage = () => {
@@ -20,6 +20,11 @@ const NewCourtPage = () => {
 
     // add all images to the formData
     FormInfo.append("images",Array.from(images));
+
+    alert("Thank you! Your submission is made and will be reviewed!")
+
+    // Redirect to the Court Details page with the new court's ID
+    useNavigate().push(`/courts`);
 
   }
 
